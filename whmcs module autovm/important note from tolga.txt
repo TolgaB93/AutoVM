@@ -1,0 +1,27 @@
+new edits of WHMCS module 
+autovm.class.php 
+
+public $poolId; variable
+createVps() funuction $data array : inside 'poolId' => $this->poolId defined as new value. 
+ips() function $data array inside :'poolId' => $this->poolId defined as new value. 
+check() function $data array inside :'poolId' => $this->poolId defined as new value. 
+
+autovm.php inside :
+autovm_CreateAccount() method / these are the new lines 
+
+if(empty($params['configoption9'])){
+		$class->datastoreId = $params['configoption2'];
+		$class->serverId = $params['configoption1'];
+	}
+	else{
+		$class->poolId = $params['configoption9'];
+	}
+
+configoption9=PoolId 
+
+autovm_ConfigOptions() function new array new values added:
+
+        'PoolId' => array(
+            'Type' => 'text',
+            'Description' => 'Server Pool Id',
+        ),

@@ -1,0 +1,67 @@
+Notes about Urls and file paths.
+Modules/candy : about pyhton
+Modules/admin : about admin side
+Modules/site : website/user interface
+Modules/api : whmcs module and transfers data
+
+Controllers is the main file of the urls. Everytime autovm generates something, taking filepath
+from urls and running specific php file.
+example:
+Modules/admin/controlelrs/testcontroller.php : we can create more actions like actionTolga
+and view html info form modules/admin/views/test
+
+________________________
+files i edited/addes mainly:
+modules/admins/views/layouts/mains.php header and footers , added menu named Dedicated Pools.
+
+creates ServerPool.php in "models" file.
+
+modules/admin/controllers: ServerPoolController.php file creates. and added extra html lines
+in modules/admin/views/server-pool entire codes/files created as part of project.
+
+helpers file created: added Pool.php
+
+extension Api.php edited. I added const ACTION_SERVER_POOL = '/server-pool 
+also added modules/candy/contrllers/DefaultController.php inside: actionServerPool()
+new path function. 
+
+modules/candy/python added server_pool.py
+
+inside commands folder, CronController.php (running every min) added actionServerPool() new path
+function created to pull server stats and write to db . It run by ssh php yii cron/server-pool
+
+edits of modues/api/controllers
+VpsController.php
+actionCreate()
+actionCheck()
+ServerController.php
+actionIP()
+
+---------------------
+new edits of WHMCS module 
+autovm.class.php 
+
+public $poolId; variable
+createVps() funuction $data array : inside 'poolId' => $this->poolId defined as new value. 
+ips() function $data array inside :'poolId' => $this->poolId defined as new value. 
+check() function $data array inside :'poolId' => $this->poolId defined as new value. 
+
+autovm.php inside :
+autovm_CreateAccount() method / these are the new lines 
+
+if(empty($params['configoption9'])){
+		$class->datastoreId = $params['configoption2'];
+		$class->serverId = $params['configoption1'];
+	}
+	else{
+		$class->poolId = $params['configoption9'];
+	}
+
+configoption9=PoolId 
+
+autovm_ConfigOptions() function new array new values added:
+
+        'PoolId' => array(
+            'Type' => 'text',
+            'Description' => 'Server Pool Id',
+        ),
